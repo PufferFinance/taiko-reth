@@ -1,5 +1,6 @@
 //! Ethereum block executor.
 
+use std::str::FromStr;
 use crate::{
     dao_fork::{DAO_HARDFORK_BENEFICIARY, DAO_HARDKFORK_ACCOUNTS},
     taiko::{check_anchor_tx, check_anchor_tx_ontake, TaikoData},
@@ -232,7 +233,9 @@ where
             // Set taiko specific data
             evm.tx_mut().taiko.is_anchor = is_anchor;
             // set the treasury address
-            evm.tx_mut().taiko.treasury = taiko_data.clone().unwrap().l2_contract;
+            let treasury_address = Address::from_str("0x8787000000000000000000000000000000010001")
+                .expect("invalid treasury account");
+            evm.tx_mut().taiko.treasury = treasury_address;
             evm.tx_mut().taiko.basefee_ratio = taiko_data.clone().unwrap().base_fee_config.sharing_pctg;
 
             // Execute transaction.
